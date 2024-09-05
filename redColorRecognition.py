@@ -5,13 +5,13 @@ cap = cv.VideoCapture(0)
 
 while True:
     # _, frame = cap.read()
-    frame = cv.imread("colortest.png")
-    frame = cv.flip(frame, 1)
+    frame = cv.imread("HSV_color_space_HS.png")
+    # frame = cv.flip(frame, 1)
     hsvFrame = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
 
     # Set range for red color and define mask
-    red_lower = np.array([136, 150, 100], np.uint8)
-    red_upper = np.array([180, 255, 255], np.uint8)
+    red_lower = np.array([25, 150, 100], np.uint8)
+    red_upper = np.array([35, 255, 255], np.uint8)
     red_mask = cv.inRange(hsvFrame, red_lower, red_upper)
 
     kernal = np.ones((5, 5), "uint8")
