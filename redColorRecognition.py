@@ -4,12 +4,10 @@ import numpy as np
 cap = cv.VideoCapture(0)
 
 while True:
-    # _, frame = cap.read()
-    frame = cv.imread("HSV_color_space_HS.png")
-    # frame = cv.flip(frame, 1)
+    ret, frame = cap.read()
+    # frame = cv.imread("HSV_color_space_HS.png")
     hsvFrame = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
 
-    # Set range for red color and define mask
     red_lower = np.array([25, 150, 100], np.uint8)
     red_upper = np.array([35, 255, 255], np.uint8)
     red_mask = cv.inRange(hsvFrame, red_lower, red_upper)
@@ -28,6 +26,19 @@ while True:
                 cv.drawContours(frame, cnt, -1, (255, 0, 255), 5)
                 peri = cv.arcLength(cnt, True)
                 approx = cv.approxPolyDP(cnt, 0.02 * peri, True)
+
+                # calculate moments for each contour
+                M = cv.moments(cnt)
+
+                # calculate x,y coordinate of center
+                if M["m00"] != 0:
+                    cX = int(M["m10"] / M["m00"])
+                    cY = int(M["m01"] / M["m00"])
+                else:
+                    cX, cY = 0, 0
+
+                # draw the contour and center of the shape on the image
+                cv.circle(frame, (cX, cY), 5, (255, 255, 255), -1)
 
     cv.imshow('result', frame)
 
